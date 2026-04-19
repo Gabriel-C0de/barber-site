@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel | Barber Shop</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container container-lg">
+
+        <div class="dashboard-header">
+            <div style="text-align:left;">
+                <div style="font-size:1.6em;">💈</div>
+                <h1 style="font-size:1.2em; letter-spacing:2px;">Barber Shop</h1>
+            </div>
+            <div style="text-align:right;">
+                <span class="user-badge">
+                    {% if is_admin %}👑 Admin{% else %}✂️ {{ session['user'] }}{% endif %}
+                </span>
+                <br>
+                <a href="/logout" class="btn-sair">Sair →</a>
+            </div>
+        </div>
+
+        <p class="subtitulo" style="text-align:left; margin-bottom:24px;">
+            Painel de agendamentos
+        </p>
+
+        <hr class="divisor">
+
+        <h2 style="text-align:left; font-size:1em; margin-bottom:16px;">
+            ✂️ Novo agendamento
+        </h2>
+
+        <form method="GET" action="/dashboard" id="form-data">
+            <div class="campo">
+                <label>Escolha a data</label>
+                <input
+                    type="date"
+                    name="data"
+                    value="{{ data_selecionada }}"
+                    onchange="this.form.submit()"
+                    min="{{ hoje }}"
+                >
+            </div>
+        </form>
+
+        {% if data_selecionada %}
+            {% if horarios %}
+            <form method="POST" action="/agendar">
+                <input type="hidden" name="data" value="{{ data_selecionada }}">
+                <div class="campo">
+                    <label>Nome do cliente</label>
+                    <input type="text" name="nome" placeholder="Ex: João Silva" required>
+                </div>
+                <div class="campo">
+                    <label>Horário disponível</label>
+                    <select name="hora" class="select-hora">
+                        {% for h in horarios %}
+                        <option value="{{ h }}">{{ h }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <button type="submit" class="btn">Agendar</button>
+            </form>
+            {% else %}
+            <p class="dia-cheio">📅 Dia lotado! Escolha outra data.</p>
+            {% endif %}
+        {% endif %}
+
+        <hr class="divisor">
+
+        <h2 style="text-align:left; font-size:1em; margin-bottom:4px;">
+            📋 Agendamentos
+        </h2>
+
+        {% if agendamentos %}
+        <ul>
+            {% for ag in agendamentos %}
+            <li>
+                <div>
+                    <span class="nome-cliente">✂️ {{ ag[1] }}</span>
+                    <span class="ag-user">{{ ag[4] }}</span>
+                </div>
+                <div style="text-align:right;">
+                    <span class="horario">{{ ag[2] }} às {{ ag[3] }}</span>
+                    {% if is_admin or ag[4] == session['user'] %}
+                    <a href="/excluir/{{ ag[0] }}" class="btn-excluir" onclick="return confirm('Excluir este agendamento?')">✕</a>
+                    {% endif %}
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <p class="lista-vazia">Nenhum agendamento ainda. 💈</p>
+        {% endif %}
+
+    </div>
+</body>
+</html>
