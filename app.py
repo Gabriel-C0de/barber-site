@@ -7,10 +7,10 @@ from dotenv import load_dotenv
 load_dotenv()
 
 app = Flask(__name__)
-app.secret_key = os.getenv('SECRET_KEY')
+app.secret_key = os.getenv('SECRET_KEY', 'barber2024')
 
-ADMIN_USER = os.getenv('ADMIN_USER')
-ADMIN_PASS = os.getenv('ADMIN_PASS')
+ADMIN_USER = os.getenv('ADMIN_USER', 'admin')
+ADMIN_PASS = os.getenv('ADMIN_PASS', 'admin123')
 
 HORARIOS = [
     '08:00', '08:30', '09:00', '09:30',
@@ -98,13 +98,24 @@ def login():
         if usuario:
             session['user'] = user
             session['admin'] = False
-            return redirect('/dashboard')
+            return redirect('/meus')
         return render_template('login.html', erro='Usuário ou senha incorretos.')
     return render_template('login.html', erro=None)
 
 @app.route('/dashboard')
 def dashboard():
-    if 'user' not in session:
+    if not session.get('admin'):
+        return redirect('/login')
+    conn = conectar()
+    c = conn.cursor()
+    c.execute('SELECT * FROM agendamentos ORDER BY data ASC, hora ASC')
+    agendamentos = c.fetchall()
+    conn.close()
+    return render_template('dashboard.html', agendamentos=agendamentos, hoje=date.today().isoformat())
+
+@app.route('/meus')
+def meus():
+    if 'user' not in session or session.get('admin'):
         return redirect('/login')
     data_selecionada = request.args.get('data', '')
     horarios = []
@@ -112,15 +123,14 @@ def dashboard():
         horarios = horarios_disponiveis(data_selecionada)
     conn = conectar()
     c = conn.cursor()
-    c.execute('SELECT * FROM agendamentos ORDER BY data ASC, hora ASC')
-    agendamentos = c.fetchall()
+    c.execute('SELECT * FROM agendamentos WHERE user = ? ORDER BY data ASC, hora ASC', (session['user'],))
+    meus_ags = c.fetchall()
     conn.close()
     return render_template(
-        'dashboard.html',
-        agendamentos=agendamentos,
+        'meus.html',
+        agendamentos=meus_ags,
         horarios=horarios,
         data_selecionada=data_selecionada,
-        is_admin=session.get('admin', False),
         hoje=date.today().isoformat()
     )
 
@@ -131,6 +141,7 @@ def agendar():
     nome = request.form['nome'].strip()
     data = request.form['data']
     hora = request.form['hora']
+    destino = '/dashboard' if session.get('admin') else '/meus'
     if nome and data and hora:
         if hora in horarios_disponiveis(data):
             conn = conectar()
@@ -141,7 +152,7 @@ def agendar():
             )
             conn.commit()
             conn.close()
-    return redirect('/dashboard')
+    return redirect(destino)
 
 @app.route('/excluir/<int:id>')
 def excluir(id):
@@ -155,7 +166,8 @@ def excluir(id):
         c.execute('DELETE FROM agendamentos WHERE id = ?', (id,))
         conn.commit()
     conn.close()
-    return redirect('/dashboard')
+    destino = '/dashboard' if session.get('admin') else '/meus'
+    return redirect(destino)
 
 @app.route('/logout')
 def logout():

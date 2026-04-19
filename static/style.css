@@ -8,10 +8,82 @@ body {
     font-family: 'Segoe UI', Arial, sans-serif;
     background: #0d0d0d;
     min-height: 100vh;
+    color: white;
+}
+
+/* ── LANDING PAGE ── */
+.landing {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 40px 20px;
+    background: radial-gradient(ellipse at top, #1a1200 0%, #0d0d0d 70%);
+}
+
+.landing-logo {
+    font-size: 5em;
+    margin-bottom: 16px;
+    filter: drop-shadow(0 0 40px rgba(201,168,76,0.4));
+}
+
+.landing h1 {
+    font-size: 3.5em;
+    font-weight: 900;
+    color: #c9a84c;
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+}
+
+.landing-sub {
+    font-size: 1em;
+    color: #555;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    margin-bottom: 60px;
+}
+
+.landing-btns {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.landing-detalhe {
+    margin-top: 80px;
+    display: flex;
+    gap: 48px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.detalhe-item {
+    text-align: center;
+}
+
+.detalhe-item .icone {
+    font-size: 2em;
+    margin-bottom: 8px;
+}
+
+.detalhe-item p {
+    font-size: 0.75em;
+    color: #555;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+/* ── FORMULÁRIOS (login, register) ── */
+.page-center {
+    min-height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: white;
+    padding: 20px;
 }
 
 .container {
@@ -26,16 +98,16 @@ body {
 }
 
 .container-lg {
-    max-width: 520px;
+    max-width: 640px;
 }
 
 .logo {
-    font-size: 3em;
+    font-size: 2.5em;
     margin-bottom: 4px;
 }
 
 h1 {
-    font-size: 1.8em;
+    font-size: 1.6em;
     color: #c9a84c;
     letter-spacing: 3px;
     text-transform: uppercase;
@@ -43,36 +115,35 @@ h1 {
 }
 
 .subtitulo {
-    color: #666;
-    font-size: 0.85em;
+    color: #555;
+    font-size: 0.78em;
     margin-bottom: 32px;
-    letter-spacing: 1px;
+    letter-spacing: 2px;
     text-transform: uppercase;
 }
 
 h2 {
-    font-size: 1.3em;
+    font-size: 1.2em;
     color: #c9a84c;
     margin-bottom: 24px;
     letter-spacing: 1px;
 }
 
 .campo {
-    position: relative;
     margin-bottom: 14px;
     text-align: left;
 }
 
 .campo label {
     display: block;
-    font-size: 0.75em;
-    color: #888;
+    font-size: 0.72em;
+    color: #666;
     margin-bottom: 6px;
     letter-spacing: 1px;
     text-transform: uppercase;
 }
 
-input {
+input, .select-hora {
     width: 100%;
     padding: 13px 16px;
     border: 1px solid #2a2a2a;
@@ -82,9 +153,11 @@ input {
     font-size: 0.95em;
     transition: border-color 0.2s, box-shadow 0.2s;
     outline: none;
+    font-family: inherit;
+    cursor: pointer;
 }
 
-input:focus {
+input:focus, .select-hora:focus {
     border-color: #c9a84c;
     box-shadow: 0 0 0 3px rgba(201,168,76,0.1);
 }
@@ -101,7 +174,7 @@ input.ok-input {
 
 .msg-erro {
     color: #e74c3c;
-    font-size: 0.78em;
+    font-size: 0.75em;
     margin-top: 4px;
     display: none;
 }
@@ -110,6 +183,7 @@ input.ok-input {
     display: block;
 }
 
+/* ── BOTÕES ── */
 .btn {
     width: 100%;
     padding: 14px;
@@ -118,16 +192,17 @@ input.ok-input {
     color: #0d0d0d;
     border: none;
     border-radius: 8px;
-    font-size: 1em;
+    font-size: 0.95em;
     font-weight: 700;
     cursor: pointer;
-    letter-spacing: 1px;
+    letter-spacing: 2px;
     text-transform: uppercase;
     transition: opacity 0.2s, transform 0.1s;
+    font-family: inherit;
 }
 
 .btn:hover {
-    opacity: 0.9;
+    opacity: 0.88;
     transform: translateY(-1px);
 }
 
@@ -144,12 +219,20 @@ input.ok-input {
 
 .btn-outline:hover {
     background: rgba(201,168,76,0.08);
+    opacity: 1;
 }
 
+.btn-sm {
+    width: auto;
+    padding: 8px 20px;
+    font-size: 0.8em;
+    margin-top: 0;
+}
+
+/* ── LINKS ── */
 a {
     color: #c9a84c;
     text-decoration: none;
-    font-size: 0.9em;
 }
 
 a:hover {
@@ -160,48 +243,91 @@ a:hover {
     display: block;
     margin-top: 20px;
     color: #555;
-    font-size: 0.85em;
+    font-size: 0.82em;
 }
 
 .link-bloco span {
     color: #c9a84c;
 }
 
-.divisor {
-    border: none;
-    border-top: 1px solid #2a2a2a;
-    margin: 28px 0;
-}
-
+/* ── ALERTAS ── */
 .alerta-erro {
     background: rgba(231,76,60,0.1);
     border: 1px solid rgba(231,76,60,0.3);
     color: #e74c3c;
     padding: 10px 14px;
     border-radius: 8px;
-    font-size: 0.85em;
+    font-size: 0.82em;
     margin-bottom: 16px;
     text-align: left;
 }
 
-.dashboard-header {
+/* ── PAINEL ── */
+.painel {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 32px 20px;
+}
+
+.painel-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-bottom: 32px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid #2a2a2a;
+}
+
+.painel-header-left h1 {
+    font-size: 1.4em;
+    letter-spacing: 3px;
+    margin-bottom: 2px;
+}
+
+.painel-header-left p {
+    font-size: 0.75em;
+    color: #555;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.badge-admin {
+    display: inline-block;
+    background: rgba(201,168,76,0.15);
+    border: 1px solid rgba(201,168,76,0.3);
+    color: #c9a84c;
+    font-size: 0.7em;
+    padding: 3px 10px;
+    border-radius: 20px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+}
+
+.badge-user {
+    display: inline-block;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid #2a2a2a;
+    color: #666;
+    font-size: 0.7em;
+    padding: 3px 10px;
+    border-radius: 20px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
     margin-bottom: 8px;
 }
 
 .btn-sair {
     background: transparent;
-    border: 1px solid #333;
-    color: #666;
-    padding: 6px 14px;
+    border: 1px solid #2a2a2a;
+    color: #555;
+    padding: 8px 16px;
     border-radius: 6px;
-    font-size: 0.8em;
+    font-size: 0.78em;
     cursor: pointer;
     text-decoration: none;
     transition: border-color 0.2s, color 0.2s;
-    width: auto;
+    letter-spacing: 1px;
 }
 
 .btn-sair:hover {
@@ -210,92 +336,156 @@ a:hover {
     text-decoration: none;
 }
 
-.lista-vazia {
-    color: #444;
-    font-size: 0.9em;
-    padding: 20px 0;
+/* ── SEÇÕES DO PAINEL ── */
+.secao {
+    margin-bottom: 40px;
 }
 
-ul {
-    list-style: none;
-    margin-top: 12px;
+.secao-titulo {
+    font-size: 0.72em;
+    color: #555;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #1e1e1e;
 }
 
-li {
-    background: #111;
+/* ── CARD DE AGENDAR ── */
+.card-agendar {
+    background: #141414;
     border: 1px solid #2a2a2a;
-    border-radius: 8px;
-    padding: 14px 16px;
-    margin-bottom: 8px;
-    text-align: left;
+    border-radius: 12px;
+    padding: 24px;
+}
+
+.grid2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+/* ── LISTA DE AGENDAMENTOS ── */
+.lista-vazia {
+    text-align: center;
+    padding: 40px 0;
+    color: #333;
     font-size: 0.9em;
+}
+
+.lista-vazia .icone-vazio {
+    font-size: 2.5em;
+    margin-bottom: 12px;
+    display: block;
+    opacity: 0.4;
+}
+
+.ag-card {
+    background: #141414;
+    border: 1px solid #222;
+    border-radius: 12px;
+    padding: 18px 20px;
+    margin-bottom: 10px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    transition: border-color 0.2s;
 }
 
-li .nome-cliente {
-    color: white;
-    font-weight: 600;
+.ag-card:hover {
+    border-color: #333;
 }
 
-li .horario {
-    color: #c9a84c;
-    font-size: 0.85em;
+.ag-card-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
 }
 
-.select-hora {
-    width: 100%;
-    padding: 13px 16px;
-    border: 1px solid #2a2a2a;
-    border-radius: 8px;
-    background: #111;
-    color: white;
+.ag-icone {
+    width: 42px;
+    height: 42px;
+    background: rgba(201,168,76,0.1);
+    border: 1px solid rgba(201,168,76,0.2);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2em;
+    flex-shrink: 0;
+}
+
+.ag-nome {
     font-size: 0.95em;
-    outline: none;
-    cursor: pointer;
+    font-weight: 600;
+    color: white;
+    margin-bottom: 3px;
 }
 
-.select-hora:focus {
-    border-color: #c9a84c;
-    box-shadow: 0 0 0 3px rgba(201,168,76,0.1);
-}
-
-.user-badge {
+.ag-meta {
     font-size: 0.75em;
-    color: #c9a84c;
+    color: #555;
     letter-spacing: 1px;
 }
 
-.ag-user {
-    display: block;
-    font-size: 0.75em;
+.ag-card-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-shrink: 0;
+}
+
+.ag-horario {
+    text-align: right;
+}
+
+.ag-horario-hora {
+    font-size: 1.1em;
+    font-weight: 700;
+    color: #c9a84c;
+}
+
+.ag-horario-data {
+    font-size: 0.72em;
     color: #555;
-    margin-top: 2px;
+    letter-spacing: 1px;
 }
 
 .btn-excluir {
-    display: inline-block;
-    margin-top: 4px;
-    background: rgba(231,76,60,0.1);
-    border: 1px solid rgba(231,76,60,0.3);
-    color: #e74c3c;
-    padding: 2px 8px;
-    border-radius: 4px;
-    font-size: 0.75em;
+    width: 32px;
+    height: 32px;
+    background: transparent;
+    border: 1px solid #2a2a2a;
+    border-radius: 6px;
+    color: #444;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85em;
     text-decoration: none;
+    transition: background 0.2s, border-color 0.2s, color 0.2s;
     cursor: pointer;
-    transition: background 0.2s;
 }
 
 .btn-excluir:hover {
-    background: rgba(231,76,60,0.25);
+    background: rgba(231,76,60,0.1);
+    border-color: rgba(231,76,60,0.4);
+    color: #e74c3c;
     text-decoration: none;
 }
 
 .dia-cheio {
+    background: rgba(231,76,60,0.08);
+    border: 1px solid rgba(231,76,60,0.2);
     color: #e74c3c;
-    font-size: 0.9em;
-    padding: 16px 0;
+    padding: 14px;
+    border-radius: 8px;
+    font-size: 0.85em;
     text-align: center;
+}
+
+.divisor {
+    border: none;
+    border-top: 1px solid #1e1e1e;
+    margin: 32px 0;
 }

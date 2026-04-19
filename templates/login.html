@@ -7,28 +7,30 @@
     <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
-    <div class="container">
-        <div class="logo">💈</div>
-        <h2>Bem-vindo de volta</h2>
+    <div class="page-center">
+        <div class="container">
+            <div class="logo">💈</div>
+            <h2>Bem-vindo de volta</h2>
 
-        {% if erro %}
-        <div class="alerta-erro">⚠️ {{ erro }}</div>
-        {% endif %}
+            {% if erro %}
+            <div class="alerta-erro">⚠️ {{ erro }}</div>
+            {% endif %}
 
-        <form method="POST">
-            <div class="campo">
-                <label>Usuário</label>
-                <input type="text" name="username" placeholder="Digite seu usuário" required>
-            </div>
-            <div class="campo">
-                <label>Senha</label>
-                <input type="password" name="password" placeholder="Digite sua senha" required>
-            </div>
-            <button type="submit" class="btn">Entrar</button>
-        </form>
+            <form method="POST">
+                <div class="campo">
+                    <label>Usuário</label>
+                    <input type="text" name="username" placeholder="Digite seu usuário" required>
+                </div>
+                <div class="campo">
+                    <label>Senha</label>
+                    <input type="password" name="password" placeholder="Digite sua senha" required>
+                </div>
+                <button type="submit" class="btn">Entrar</button>
+            </form>
 
-        <p class="link-bloco">Não tem conta? <a href="/register"><span>Criar conta</span></a></p>
-        <p class="link-bloco" style="margin-top:8px;"><a href="/">← Voltar</a></p>
+            <p class="link-bloco">Não tem conta? <a href="/register"><span>Criar conta</span></a></p>
+            <p class="link-bloco" style="margin-top:8px;"><a href="/">← Voltar</a></p>
+        </div>
     </div>
 </body>
 </html>

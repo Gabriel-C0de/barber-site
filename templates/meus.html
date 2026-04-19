@@ -3,24 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin | Barber Shop</title>
+    <title>Meus agendamentos | Barber Shop</title>
     <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
     <div class="painel">
         <div class="painel-header">
             <div class="painel-header-left">
-                <div class="badge-admin">👑 Administrador</div>
+                <div class="badge-user">✂️ {{ session['user'] }}</div>
                 <h1>💈 Barber Shop</h1>
-                <p>Todos os agendamentos</p>
+                <p>Meus agendamentos</p>
             </div>
             <a href="/logout" class="btn-sair">Sair →</a>
         </div>
 
         <div class="secao">
-            <p class="secao-titulo">✂️ Novo agendamento</p>
+            <p class="secao-titulo">📅 Fazer agendamento</p>
             <div class="card-agendar">
-                <form method="GET" action="/dashboard">
+                <form method="GET" action="/meus">
                     <div class="campo">
                         <label>Escolha a data</label>
                         <input type="date" name="data" value="{{ data_selecionada }}" onchange="this.form.submit()" min="{{ hoje }}">
@@ -31,21 +31,19 @@
                     {% if horarios %}
                     <form method="POST" action="/agendar" style="margin-top:16px;">
                         <input type="hidden" name="data" value="{{ data_selecionada }}">
-                        <div class="grid2">
-                            <div class="campo">
-                                <label>Nome do cliente</label>
-                                <input type="text" name="nome" placeholder="Ex: João Silva" required>
-                            </div>
-                            <div class="campo">
-                                <label>Horário disponível</label>
-                                <select name="hora" class="select-hora">
-                                    {% for h in horarios %}
-                                    <option value="{{ h }}">{{ h }}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
+                        <div class="campo">
+                            <label>Seu nome</label>
+                            <input type="text" name="nome" placeholder="Ex: João Silva" required>
                         </div>
-                        <button type="submit" class="btn btn-sm" style="margin-top:8px;">Agendar</button>
+                        <div class="campo">
+                            <label>Horário disponível</label>
+                            <select name="hora" class="select-hora">
+                                {% for h in horarios %}
+                                <option value="{{ h }}">{{ h }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-sm" style="margin-top:8px;">Confirmar agendamento</button>
                     </form>
                     {% else %}
                     <p class="dia-cheio" style="margin-top:16px;">📅 Dia lotado! Escolha outra data.</p>
@@ -55,7 +53,7 @@
         </div>
 
         <div class="secao">
-            <p class="secao-titulo">📋 Todos os agendamentos</p>
+            <p class="secao-titulo">🗓️ Meus agendamentos</p>
 
             {% if agendamentos %}
                 {% for ag in agendamentos %}
@@ -64,7 +62,7 @@
                         <div class="ag-icone">✂️</div>
                         <div>
                             <div class="ag-nome">{{ ag[1] }}</div>
-                            <div class="ag-meta">por {{ ag[4] }}</div>
+                            <div class="ag-meta">agendado por você</div>
                         </div>
                     </div>
                     <div class="ag-card-right">
@@ -72,14 +70,14 @@
                             <div class="ag-horario-hora">{{ ag[3] }}</div>
                             <div class="ag-horario-data">{{ ag[2] }}</div>
                         </div>
-                        <a href="/excluir/{{ ag[0] }}" class="btn-excluir" onclick="return confirm('Excluir este agendamento?')">✕</a>
+                        <a href="/excluir/{{ ag[0] }}" class="btn-excluir" onclick="return confirm('Cancelar este agendamento?')">✕</a>
                     </div>
                 </div>
                 {% endfor %}
             {% else %}
             <div class="lista-vazia">
                 <span class="icone-vazio">📅</span>
-                Nenhum agendamento ainda.
+                Você ainda não tem agendamentos.
             </div>
             {% endif %}
         </div>
