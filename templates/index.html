@@ -1,40 +1,78 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Barber Shop</title>
-    <link rel="stylesheet" href="/static/style.css">
-</head>
-<body>
-    <div class="landing">
-        <div class="landing-logo">💈</div>
-        <h1>Barber Shop</h1>
-        <p class="landing-sub">Estilo &amp; Precisão desde 2024</p>
+{% extends 'base.html' %}
+{% block title %}Barber Pro — Estilo & Precisão{% endblock %}
+{% block content %}
 
-        <div class="landing-btns">
-            <a href="/login">
-                <button class="btn btn-sm">Entrar</button>
-            </a>
-            <a href="/register">
-                <button class="btn btn-outline btn-sm">Criar conta</button>
-            </a>
+<section class="hero">
+    <div class="hero-badge">✨ &nbsp; Desde 2024 em São Paulo</div>
+    <h1>Estilo &<br><em>Precisão</em></h1>
+    <p class="hero-subtitle">Barbearia premium com agendamento online. Seu visual, no seu horário.</p>
+    <div class="hero-buttons">
+        {% if session.get('user') %}
+            {% if session.get('admin') %}
+                <a href="/admin" class="btn-gold">⚙️ Painel Admin</a>
+            {% else %}
+                <a href="/dashboard" class="btn-gold">📅 Minha Agenda</a>
+            {% endif %}
+        {% else %}
+            <a href="/login" class="btn-gold">✂️ Agendar agora</a>
+            <a href="/register" class="btn-outline">Criar conta →</a>
+        {% endif %}
+    </div>
+    <div class="hero-stats">
+        <div class="stat-item"><strong>500+</strong><span>Clientes</span></div>
+        <div class="stat-item"><strong>4.9★</strong><span>Avaliação</span></div>
+        <div class="stat-item"><strong>3+</strong><span>Barbeiros</span></div>
+    </div>
+</section>
+
+<div class="divider"></div>
+
+<div class="section">
+    <div class="section-header">
+        <span class="section-tag">✦ Por que nos escolher</span>
+        <h2>Experiência que faz diferença</h2>
+        <p>Do agendamento ao corte final, cuidamos de cada detalhe.</p>
+    </div>
+    <div class="features-grid">
+        <div class="card-feature">
+            <span class="card-icon">✂️</span>
+            <h3>Cortes Modernos</h3>
+            <p>Técnicas atualizadas, tendências nacionais e internacionais executadas com precisão.</p>
         </div>
-
-        <div class="landing-detalhe">
-            <div class="detalhe-item">
-                <div class="icone">✂️</div>
-                <p>Cortes modernos</p>
-            </div>
-            <div class="detalhe-item">
-                <div class="icone">📅</div>
-                <p>Agendamento online</p>
-            </div>
-            <div class="detalhe-item">
-                <div class="icone">⭐</div>
-                <p>Profissionais experts</p>
-            </div>
+        <div class="card-feature">
+            <span class="card-icon">📅</span>
+            <h3>Agendamento Online</h3>
+            <p>Escolha data e horário direto pelo site, sem filas, sem espera.</p>
+        </div>
+        <div class="card-feature">
+            <span class="card-icon">⭐</span>
+            <h3>Profissionais Experts</h3>
+            <p>Barbeiros experientes e certificados, comprometidos com o melhor resultado.</p>
+        </div>
+        <div class="card-feature">
+            <span class="card-icon">🪒</span>
+            <h3>Barba & Pigmentação</h3>
+            <p>Tratamentos completos para barba, sobrancelha e pigmentação capilar.</p>
         </div>
     </div>
-</body>
-</html>
+</div>
+
+<div class="divider"></div>
+
+<div class="section">
+    <div class="section-header">
+        <span class="section-tag">✦ Tabela de serviços</span>
+        <h2>Nossos Serviços</h2>
+        <p>Qualidade premium em cada serviço, com preços justos.</p>
+    </div>
+    <div class="services-list">
+        <div class="service-card"><span class="s-icon">✂️</span><div class="s-info"><h4>Corte Masculino</h4><span>R$ 45,00</span></div></div>
+        <div class="service-card"><span class="s-icon">🪒</span><div class="s-info"><h4>Barba Completa</h4><span>R$ 35,00</span></div></div>
+        <div class="service-card"><span class="s-icon">💈</span><div class="s-info"><h4>Corte + Barba</h4><span>R$ 70,00</span></div></div>
+        <div class="service-card"><span class="s-icon">💆</span><div class="s-info"><h4>Hidratação Capilar</h4><span>R$ 40,00</span></div></div>
+        <div class="service-card"><span class="s-icon">🖊️</span><div class="s-info"><h4>Pigmentação</h4><span>R$ 50,00</span></div></div>
+        <div class="service-card"><span class="s-icon">👁️</span><div class="s-info"><h4>Design de Sobrancelha</h4><span>R$ 25,00</span></div></div>
+    </div>
+</div>
+
+{% endblock %}

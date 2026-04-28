@@ -1,88 +1,188 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin | Barber Shop</title>
-    <link rel="stylesheet" href="/static/style.css">
-</head>
-<body>
-    <div class="painel">
-        <div class="painel-header">
-            <div class="painel-header-left">
-                <div class="badge-admin">👑 Administrador</div>
-                <h1>💈 Barber Shop</h1>
-                <p>Todos os agendamentos</p>
+{% extends 'base.html' %}
+{% block title %}Minha Agenda | Barber Pro{% endblock %}
+{% block content %}
+
+<div class="dash-wrapper">
+    <div class="dash-header">
+        <div>
+            <h2>Minha Agenda</h2>
+            <p>Olá, <strong style="color:var(--gold)">{{ session['user'] }}</strong> — gerencie seus horários</p>
+        </div>
+    </div>
+
+    <div class="dash-grid">
+        <div class="panel">
+            <div class="panel-head">Novo Agendamento</div>
+            <div class="panel-body">
+                <form method="POST" action="/agendar" id="formAgendar">
+                    <input type="hidden" name="data" id="inputData">
+                    <input type="hidden" name="hora" id="inputHora">
+                    <input type="hidden" name="profissional" id="inputProf">
+
+                    <p class="horarios-titulo">1. Barbeiro</p>
+                    <div class="profs-grid">
+                        {% for p in profissionais %}
+                        <div class="prof-btn" onclick="setP(this, '{{ p }}')">{{ p }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <p class="horarios-titulo">2. Data</p>
+                    <div class="cal-nav">
+                        <button type="button" onclick="mudarMes(-1)">‹</button>
+                        <span class="cal-mes" id="calMes"></span>
+                        <button type="button" onclick="mudarMes(1)">›</button>
+                    </div>
+                    <div class="cal-dias-semana">
+                        <div class="cal-dia-semana">DOM</div>
+                        <div class="cal-dia-semana">SEG</div>
+                        <div class="cal-dia-semana">TER</div>
+                        <div class="cal-dia-semana">QUA</div>
+                        <div class="cal-dia-semana">QUI</div>
+                        <div class="cal-dia-semana">SEX</div>
+                        <div class="cal-dia-semana">SÁB</div>
+                    </div>
+                    <div class="cal-grid" id="calGrid"></div>
+
+                    <p class="horarios-titulo">3. Horário</p>
+                    <div class="horarios-grid" id="horariosGrid">
+                        {% for h in horarios %}
+                        <div class="hora-btn" data-hora="{{ h }}" onclick="setH(this, '{{ h }}')">{{ h }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="aviso-ocupado" id="avisoOcupado">
+                        🚫 Este horário está reservado ou bloqueado. Escolha outro.
+                    </div>
+
+                    <button type="submit" class="btn-gold" style="width:100%; margin-top:24px;">Confirmar Agendamento</button>
+                </form>
             </div>
-            <a href="/logout" class="btn-sair">Sair →</a>
         </div>
 
-        <div class="secao">
-            <p class="secao-titulo">✂️ Novo agendamento</p>
-            <div class="card-agendar">
-                <form method="GET" action="/dashboard">
-                    <div class="campo">
-                        <label>Escolha a data</label>
-                        <input type="date" name="data" value="{{ data_selecionada }}" onchange="this.form.submit()" min="{{ hoje }}">
-                    </div>
-                </form>
-
-                {% if data_selecionada %}
-                    {% if horarios %}
-                    <form method="POST" action="/agendar" style="margin-top:16px;">
-                        <input type="hidden" name="data" value="{{ data_selecionada }}">
-                        <div class="grid2">
-                            <div class="campo">
-                                <label>Nome do cliente</label>
-                                <input type="text" name="nome" placeholder="Ex: João Silva" required>
-                            </div>
-                            <div class="campo">
-                                <label>Horário disponível</label>
-                                <select name="hora" class="select-hora">
-                                    {% for h in horarios %}
-                                    <option value="{{ h }}">{{ h }}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
+        <div class="panel">
+            <div class="panel-head">Meus Horários</div>
+            <div class="panel-body">
+                {% if agendamentos %}
+                    {% for ag in agendamentos %}
+                    <div class="agenda-item">
+                        <div class="ag-info">
+                            <strong>{{ ag.profissional }}</strong>
+                            <span>{{ ag.data }} — {{ ag.hora }}</span>
                         </div>
-                        <button type="submit" class="btn btn-sm" style="margin-top:8px;">Agendar</button>
-                    </form>
-                    {% else %}
-                    <p class="dia-cheio" style="margin-top:16px;">📅 Dia lotado! Escolha outra data.</p>
-                    {% endif %}
+                        <div style="display:flex; align-items:center; gap:12px;">
+                            <span class="ag-time">{{ ag.hora }}</span>
+                            <form method="POST" action="/cancelar/{{ ag.id }}">
+                                <button type="submit" class="btn-danger" onclick="return confirm('Cancelar este agendamento?')">Cancelar</button>
+                            </form>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                <div class="empty-state">
+                    <span class="es-icon">📭</span>
+                    <p>Você ainda não tem agendamentos.<br>Use o painel ao lado para agendar!</p>
+                </div>
                 {% endif %}
             </div>
         </div>
-
-        <div class="secao">
-            <p class="secao-titulo">📋 Todos os agendamentos</p>
-
-            {% if agendamentos %}
-                {% for ag in agendamentos %}
-                <div class="ag-card">
-                    <div class="ag-card-left">
-                        <div class="ag-icone">✂️</div>
-                        <div>
-                            <div class="ag-nome">{{ ag[1] }}</div>
-                            <div class="ag-meta">por {{ ag[4] }}</div>
-                        </div>
-                    </div>
-                    <div class="ag-card-right">
-                        <div class="ag-horario">
-                            <div class="ag-horario-hora">{{ ag[3] }}</div>
-                            <div class="ag-horario-data">{{ ag[2] }}</div>
-                        </div>
-                        <a href="/excluir/{{ ag[0] }}" class="btn-excluir" onclick="return confirm('Excluir este agendamento?')">✕</a>
-                    </div>
-                </div>
-                {% endfor %}
-            {% else %}
-            <div class="lista-vazia">
-                <span class="icone-vazio">📅</span>
-                Nenhum agendamento ainda.
-            </div>
-            {% endif %}
-        </div>
     </div>
-</body>
-</html>
+</div>
+
+<script>
+var datasBloqueadas = JSON.parse('{{ datas_bloqueadas_json | safe }}');
+var mes = new Date().getMonth();
+var ano = new Date().getFullYear();
+var hoje = new Date();
+hoje.setHours(0, 0, 0, 0);
+
+function renderCal() {
+    var nomes = ["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"];
+    document.getElementById('calMes').innerText = nomes[mes] + " " + ano;
+    var grid = document.getElementById('calGrid');
+    grid.innerHTML = '';
+    var primeiroDia = new Date(ano, mes, 1).getDay();
+    var ultimoDia = new Date(ano, mes + 1, 0).getDate();
+
+    for (var i = 0; i < primeiroDia; i++) {
+        var vazio = document.createElement('div');
+        vazio.className = 'cal-day vazio';
+        grid.appendChild(vazio);
+    }
+
+    for (var d = 1; d <= ultimoDia; d++) {
+        var div = document.createElement('div');
+        div.className = 'cal-day';
+        div.innerText = d;
+        var ds = ano + '-' + String(mes + 1).padStart(2, '0') + '-' + String(d).padStart(2, '0');
+        var dataObj = new Date(ano, mes, d);
+        dataObj.setHours(0, 0, 0, 0);
+
+        if (datasBloqueadas.indexOf(ds) !== -1 || dataObj < hoje) {
+            div.classList.add('bloqueado');
+        } else {
+            var hojeStr = hoje.getFullYear() + '-' + String(hoje.getMonth() + 1).padStart(2, '0') + '-' + String(hoje.getDate()).padStart(2, '0');
+            if (ds === hojeStr) div.classList.add('hoje');
+            (function(el, dataStr) {
+                el.onclick = function() {
+                    document.querySelectorAll('.cal-day').forEach(function(x) { x.classList.remove('selecionado'); });
+                    el.classList.add('selecionado');
+                    document.getElementById('inputData').value = dataStr;
+                    atualizarHorarios(dataStr);
+                };
+            })(div, ds);
+        }
+        grid.appendChild(div);
+    }
+}
+
+function atualizarHorarios(data) {
+    var prof = document.getElementById('inputProf').value;
+    if (!prof) return;
+    fetch('/api/horarios?data=' + data + '&profissional=' + encodeURIComponent(prof))
+        .then(function(r) { return r.json(); })
+        .then(function(disponiveis) {
+            document.querySelectorAll('.hora-btn').forEach(function(btn) {
+                var h = btn.getAttribute('data-hora');
+                btn.classList.remove('selecionado-h');
+                if (disponiveis.indexOf(h) !== -1) {
+                    btn.classList.remove('hora-bloqueada');
+                    btn.onclick = (function(b, hora) {
+                        return function() { setH(b, hora); };
+                    })(btn, h);
+                } else {
+                    btn.classList.add('hora-bloqueada');
+                    btn.onclick = function() {
+                        var av = document.getElementById('avisoOcupado');
+                        av.classList.add('visivel');
+                        setTimeout(function() { av.classList.remove('visivel'); }, 3000);
+                    };
+                }
+            });
+        });
+}
+
+function setH(el, v) {
+    document.querySelectorAll('.hora-btn').forEach(function(b) { b.classList.remove('selecionado-h'); });
+    el.classList.add('selecionado-h');
+    document.getElementById('inputHora').value = v;
+    document.getElementById('avisoOcupado').classList.remove('visivel');
+}
+
+function setP(el, v) {
+    document.querySelectorAll('.prof-btn').forEach(function(b) { b.classList.remove('selecionado-p'); });
+    el.classList.add('selecionado-p');
+    document.getElementById('inputProf').value = v;
+    var dataSel = document.getElementById('inputData').value;
+    if (dataSel) atualizarHorarios(dataSel);
+}
+
+function mudarMes(v) {
+    mes += v;
+    if (mes < 0) { mes = 11; ano--; }
+    if (mes > 11) { mes = 0; ano++; }
+    renderCal();
+}
+
+renderCal();
+</script>
+{% endblock %}

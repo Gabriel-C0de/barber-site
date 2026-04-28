@@ -3,72 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Criar conta | Barber Shop</title>
-    <link rel="stylesheet" href="/static/style.css">
+    <title>Criar conta | Barber Pro</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <div class="page-center">
-        <div class="container">
-            <div class="logo">💈</div>
-            <h2>Criar conta</h2>
-
-            {% if erro %}
-            <div class="alerta-erro">⚠️ {{ erro }}</div>
-            {% endif %}
-
-            <form method="POST" id="form-register">
-                <div class="campo">
-                    <label>Usuário</label>
-                    <input type="text" name="username" placeholder="Digite seu usuário" required>
-                </div>
-                <div class="campo">
-                    <label>Senha</label>
-                    <input type="password" name="password" id="senha" placeholder="Digite sua senha" required>
-                </div>
-                <div class="campo">
-                    <label>Confirmar senha</label>
-                    <input type="password" name="password2" id="senha2" placeholder="Repita sua senha" required>
-                    <p class="msg-erro" id="erro-senha">❌ As senhas não coincidem</p>
-                </div>
-                <button type="submit" class="btn" id="btn-cadastrar">Criar conta</button>
-            </form>
-
-            <p class="link-bloco">Já tem conta? <a href="/login"><span>Entrar</span></a></p>
+<div class="page-center">
+    <div class="auth-box">
+        <div class="auth-logo">
+            <span class="logo-icon">💈</span>
+            <h1>Barber Pro</h1>
+            <p>Crie sua conta grátis</p>
         </div>
+        <h2>Criar conta</h2>
+        {% if erro %}
+        <div class="alerta-erro">⚠️ {{ erro }}</div>
+        {% endif %}
+        <form method="POST" id="form-register">
+            <div class="campo">
+                <label>Usuário</label>
+                <input type="text" name="username" placeholder="Escolha um usuário" required>
+            </div>
+            <div class="campo">
+                <label>Senha</label>
+                <input type="password" name="password" id="senha" placeholder="Crie uma senha" required>
+            </div>
+            <div class="campo">
+                <label>Confirmar senha</label>
+                <input type="password" name="password2" id="senha2" placeholder="Repita a senha" required>
+                <p class="msg-erro-inline" id="erro-senha">❌ As senhas não coincidem</p>
+            </div>
+            <button type="submit" class="btn" id="btn-cadastrar">Criar conta →</button>
+        </form>
+        <p class="link-bloco">Já tem conta? <a href="/login">Entrar</a></p>
+        <p class="link-bloco"><a href="/">← Voltar ao site</a></p>
     </div>
-
-    <script>
-        const senha = document.getElementById('senha')
-        const senha2 = document.getElementById('senha2')
-        const erroMsg = document.getElementById('erro-senha')
-        const btn = document.getElementById('btn-cadastrar')
-
-        function verificar() {
-            if (senha2.value.length === 0) {
-                senha2.className = ''
-                erroMsg.classList.remove('visivel')
-                btn.disabled = false
-                return
-            }
-            if (senha.value !== senha2.value) {
-                senha2.classList.add('erro-input')
-                senha2.classList.remove('ok-input')
-                erroMsg.classList.add('visivel')
-                btn.disabled = true
-            } else {
-                senha2.classList.add('ok-input')
-                senha2.classList.remove('erro-input')
-                erroMsg.classList.remove('visivel')
-                btn.disabled = false
-            }
-        }
-
-        senha.addEventListener('input', verificar)
-        senha2.addEventListener('input', verificar)
-
-        document.getElementById('form-register').addEventListener('submit', function(e) {
-            if (senha.value !== senha2.value) e.preventDefault()
-        })
-    </script>
+</div>
+<script>
+    const s1 = document.getElementById('senha')
+    const s2 = document.getElementById('senha2')
+    const err = document.getElementById('erro-senha')
+    const btn = document.getElementById('btn-cadastrar')
+    function check() {
+        if (!s2.value) { s2.className=''; err.classList.remove('visivel'); btn.disabled=false; return; }
+        if (s1.value !== s2.value) { s2.classList.add('erro-input'); s2.classList.remove('ok-input'); err.classList.add('visivel'); btn.disabled=true; }
+        else { s2.classList.add('ok-input'); s2.classList.remove('erro-input'); err.classList.remove('visivel'); btn.disabled=false; }
+    }
+    s1.addEventListener('input', check)
+    s2.addEventListener('input', check)
+    document.getElementById('form-register').addEventListener('submit', e => { if(s1.value!==s2.value) e.preventDefault() })
+</script>
 </body>
 </html>

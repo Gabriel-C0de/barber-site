@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+{% block title %}Admin | Barber Pro{% endblock %}
+{% block content %}
+
+<div class="admin-wrapper">
+    <div class="admin-header">
+        <div>
+            <h1>Painel Admin</h1>
+            <p>Gerencie bloqueios e agendamentos</p>
+        </div>
+        <a href="/logout" style="color:var(--red); text-decoration:none; border:1px solid rgba(255,68,68,0.3); padding:8px 20px; border-radius:8px; font-size:14px;">Sair</a>
+    </div>
+
+    <div class="admin-grid">
+        <div class="admin-panel">
+            <div class="admin-panel-head">Bloquear Data Inteira</div>
+            <div class="admin-panel-body">
+                <form method="POST" action="/bloquear_data" class="admin-form">
+                    <input type="date" name="data" required>
+                    <button type="submit" class="btn-admin">Bloquear</button>
+                </form>
+                {% if datas_bloqueadas %}
+                    {% for d in datas_bloqueadas %}
+                    <div class="bloqueio-item">
+                        <span>📅 {{ d.data }}</span>
+                        <a href="/desbloquear_data/{{ d.id }}" class="btn-desbloquear">Remover</a>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                <p style="color:var(--text-muted); font-size:13px;">Nenhuma data bloqueada.</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="admin-panel">
+            <div class="admin-panel-head">Bloquear Horário Específico</div>
+            <div class="admin-panel-body">
+                <form method="POST" action="/bloquear_horario" class="admin-form">
+                    <input type="date" name="data" required>
+                    <select name="hora">
+                        {% for h in horarios %}
+                        <option value="{{ h }}">{{ h }}</option>
+                        {% endfor %}
+                    </select>
+                    <button type="submit" class="btn-admin">Bloquear</button>
+                </form>
+                {% if horarios_bloqueados %}
+                    {% for h in horarios_bloqueados %}
+                    <div class="bloqueio-item">
+                        <span>🕐 {{ h.data }} — {{ h.hora }}</span>
+                        <a href="/desbloquear_horario/{{ h.id }}" class="btn-desbloquear">Remover</a>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                <p style="color:var(--text-muted); font-size:13px;">Nenhum horário bloqueado.</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="admin-panel">
+            <div class="admin-panel-head">Bloquear Barbeiro</div>
+            <div class="admin-panel-body">
+                <form method="POST" action="/bloquear_profissional" class="admin-form">
+                    <select name="profissional">
+                        {% for p in profissionais %}
+                        <option value="{{ p }}">{{ p }}</option>
+                        {% endfor %}
+                    </select>
+                    <button type="submit" class="btn-admin">Bloquear</button>
+                </form>
+                {% if profs_bloqueados %}
+                    {% for p in profs_bloqueados %}
+                    <div class="bloqueio-item">
+                        <span>💈 {{ p.profissional }}</span>
+                        <a href="/desbloquear_profissional/{{ p.id }}" class="btn-desbloquear">Remover</a>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                <p style="color:var(--text-muted); font-size:13px;">Nenhum barbeiro bloqueado.</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="admin-panel">
+            <div class="admin-panel-head">Resumo — {{ agendamentos|length }} agendamentos</div>
+            <div class="admin-panel-body" style="padding:0;">
+                {% if agendamentos %}
+                    {% for ag in agendamentos %}
+                    <div class="ag-admin-item">
+                        <div class="ag-admin-left">
+                            <strong>{{ ag.nome }} — {{ ag.profissional }}</strong>
+                            <span>{{ ag.data }}</span>
+                        </div>
+                        <div class="ag-admin-right">
+                            <div>
+                                <div class="ag-admin-hora">{{ ag.hora }}</div>
+                                <div class="ag-admin-data">{{ ag.data }}</div>
+                            </div>
+                            <form method="POST" action="/cancelar/{{ ag.id }}">
+                                <button type="submit" class="btn-danger" onclick="return confirm('Cancelar agendamento de {{ ag.nome }}?')">Cancelar</button>
+                            </form>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                <div class="empty-state">
+                    <span class="es-icon">📭</span>
+                    <p>Nenhum agendamento.</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

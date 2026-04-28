@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Barber Pro{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<header class="topbar">
+    <a href="/" class="topbar-brand">
+        <span class="brand-text">✂️ Barber Pro</span>
+    </a>
+    <nav>
+        {% if session.get('user') %}
+            {% if session.get('admin') %}
+                <a href="/admin">⚙️ Admin</a>
+            {% else %}
+                <a href="/dashboard">📅 Minha agenda</a>
+            {% endif %}
+            <a href="/logout">Sair</a>
+        {% else %}
+            <a href="/login" class="nav-cta">Entrar →</a>
+        {% endif %}
+    </nav>
+</header>
+
+{% block content %}{% endblock %}
+
+<footer class="footer">
+    <p>© 2024 <span>Barber Pro</span> — Todos os direitos reservados</p>
+</footer>
+
+</body>
+</html>

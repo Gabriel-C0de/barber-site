@@ -3,34 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login | Barber Shop</title>
-    <link rel="stylesheet" href="/static/style.css">
+    <title>Entrar | Barber Pro</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <div class="page-center">
-        <div class="container">
-            <div class="logo">💈</div>
-            <h2>Bem-vindo de volta</h2>
-
-            {% if erro %}
-            <div class="alerta-erro">⚠️ {{ erro }}</div>
-            {% endif %}
-
-            <form method="POST">
-                <div class="campo">
-                    <label>Usuário</label>
-                    <input type="text" name="username" placeholder="Digite seu usuário" required>
-                </div>
-                <div class="campo">
-                    <label>Senha</label>
-                    <input type="password" name="password" placeholder="Digite sua senha" required>
-                </div>
-                <button type="submit" class="btn">Entrar</button>
-            </form>
-
-            <p class="link-bloco">Não tem conta? <a href="/register"><span>Criar conta</span></a></p>
-            <p class="link-bloco" style="margin-top:8px;"><a href="/">← Voltar</a></p>
+<div class="page-center">
+    <div class="auth-box">
+        <div class="auth-logo">
+            <span class="logo-icon">💈</span>
+            <h1>Barber Pro</h1>
+            <p>Estilo & Precisão desde 2024</p>
         </div>
+        <h2>Bem-vindo de volta</h2>
+        {% if erro %}
+        <div class="alerta-erro">⚠️ {{ erro }}</div>
+        {% endif %}
+        <form method="POST">
+            <div class="campo">
+                <label>Usuário</label>
+                <input type="text" name="username" placeholder="Digite seu usuário" required>
+            </div>
+            <div class="campo">
+                <label>Senha</label>
+                <input type="password" name="password" placeholder="Digite sua senha" required>
+            </div>
+            <button type="submit" class="btn">Entrar →</button>
+        </form>
+        <p class="link-bloco">Não tem conta? <a href="/register">Criar conta grátis</a></p>
+        <p class="link-bloco"><a href="/">← Voltar ao site</a></p>
     </div>
+</div>
 </body>
 </html>
